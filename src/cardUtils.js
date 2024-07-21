@@ -1,4 +1,6 @@
 const { fetchData } = require('./api');
+const { getRandomInRange } = require('./getRandomInRange');
+const { formatTime } = require('./formatTime');
 
 const buyCard = async (card) => {
   const data = {
@@ -19,10 +21,12 @@ const buyCard = async (card) => {
 
 const buyCardWithCooldown = async (card) => {
   if (card.cooldownSeconds) {
+    const timeout = getRandomInRange(card.cooldownSeconds * 1000, (card.cooldownSeconds + 60) * 1000);
+
     setTimeout(async () => {
-      console.log(`\nПокупка карточки «${card.name}» отложена на ${card.cooldownSeconds} секунд...`);
+      console.log(`\nПокупка карточки «${card.name}» отложена на ${formatTime(timeout)}...`);
       await buyCard(card);
-    }, card.cooldownSeconds * 1000);
+    }, timeout);
   } else {
     await buyCard(card);
   }

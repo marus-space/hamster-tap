@@ -1,5 +1,6 @@
 const { fetchData } = require('./api');
 const { getRandomInRange } = require('./getRandomInRange');
+const { formatTime } = require('./formatTime');
 
 const decodeDailyCipher = (cipher) => {
   let encoded = cipher.slice(0, 3) + cipher.slice(4);
@@ -22,11 +23,14 @@ const claimDailyCipher = async () => {
 
       console.log(`Ежедневный шифр успешно разгадан! Поздравляем с обретением ${bonusCoins.toLocaleString('ru-RU')} монет`);
 
+      console.log('POST /claim-daily-cipher response data: ', JSON.stringify(responseData, null, '\t'));
+      
+      // TODO: Получать remainSeconds из ответа на POST /claim-daily-cipher вместо рекурсивного вызова claimDailyCipher
       await claimDailyCipher();
     } else {
       const timeout = getRandomInRange(remainSeconds * 1000, (remainSeconds + 3600) * 1000);
 
-      console.log(`Сегодняшний шифр разгадан, разгадаем следующий через ${Math.floor(timeout / 60000)} минут...`);
+      console.log(`Сегодняшний шифр разгадан, разгадаем следующий через ${formatTime(timeout)}...`);
 
       setTimeout(async () => await claimDailyCipher(), timeout);
     }

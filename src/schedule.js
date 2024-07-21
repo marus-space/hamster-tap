@@ -1,6 +1,7 @@
 const { getInitialInfo, addTaps, getCoinsPerHour } = require('./tapUtils');
 const { buyCardWithCooldown, getMostProfitableCards } = require('./cardUtils');
 const { getRandomInRange } = require('./getRandomInRange');
+const { formatTime } = require('./formatTime');
 
 const generateTaps = async (config) => {
   const { maxPriceCoefficient, cardsCount, quantityPriority, showUnavailableCards } = config.autoBuySettings;
@@ -38,10 +39,12 @@ const scheduleNextTap = async (config) => {
 
   if (maxTaps && tapsRecoverPerSec) {
     const timeout = Math.floor(getRandomInRange(maxTaps / 10 * 1000, maxTaps * 1000) / tapsRecoverPerSec);
-    console.log(`\nТапаем в следующий раз через рандомные ${Math.floor(timeout / 1000).toLocaleString('ru-RU')} секунд`);
+
+    console.log(`\nТапаем в следующий раз через рандомные ${formatTime(timeout)}...`);
+
     setTimeout(() => scheduleNextTap(config), timeout);
   } else {
-    console.error('\nНе удалось загрузить данные, повторная попытка произойдёт через 1 секунду');
+    console.error(`\nНе удалось загрузить данные, повторная попытка произойдёт через ${formatTime(1000)}...`);
     setTimeout(() => scheduleNextTap(config), 1000);
   }
 };
