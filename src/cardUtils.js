@@ -9,11 +9,14 @@ const buyCard = async (card) => {
   };
 
   try {
-    const { clickerUser: { balanceCoins } } = await fetchData({ url: 'buy-upgrade', data });
-    console.log(`
-      \nКуплена выгодная карточка: «${card.name}» за ${card.price.toLocaleString('ru-RU')}\
-      \nБаланс: ${Math.floor(balanceCoins).toLocaleString('ru-RU')}\
-    `);
+    const { clickerUser } = await fetchData({ url: 'buy-upgrade', data });
+
+    if (clickerUser) {
+      console.log(`
+        \nКуплена выгодная карточка: «${card.name}» за ${card.price.toLocaleString('ru-RU')}\
+        \nБаланс: ${Math.floor(clickerUser.balanceCoins).toLocaleString('ru-RU')}\
+      `);
+    }
   } catch (error) {
     console.error('\nОшибка при покупке карточки:', error);
   }
