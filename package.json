@@ -1,0 +1,17 @@
+{
+  "name": "hamster-tap",
+  "version": "1.0.0",
+  "description": "Утилита для автоматизации тапов, покупки карточек и решении шифров в игре Hamster Kombat",
+  "main": "index.js",
+  "bin": {
+    "hamster-tap": "./index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "commander": "^9.4.0"
+  }
+}

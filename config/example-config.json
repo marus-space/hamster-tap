@@ -1,0 +1,7 @@
+{
+  "authorizationHeader": "Bearer YOUR_TOKEN",
+  "maxPriceCoefficient": 0.5,
+  "cardsCount": 5,
+  "quantityPriority": false,
+  "showUnavailableCards": false
+}
