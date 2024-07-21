@@ -26,11 +26,25 @@ cd hamster-tap
 npm install
 ```
 
+#### Установите утилиту глобально:
+
+Установите утилиту глобально, чтобы запускать ее по имени `hamster-tap`:
+
+```bash
+npm install -g
+```
+
+Вы сможете отменить это действие в будущем следующей командой:
+
+```bash
+npm uninstall -g hamster-tap
+```
+
 #### 3. Создайте файл конфигурации:
 
 Создайте файл `config/config.json` на основе предоставленного примера `config/example-config.json`. Внесите необходимые изменения в конфигурацию.
 
-Файл конфигурации config/config.json должен содержать следующие параметры:
+Файл конфигурации `config/config.json` должен содержать следующие параметры:
 
 ```json
 {
@@ -56,17 +70,23 @@ npm install
 Чтобы запустить утилиту, используйте следующую команду:
 
 ```bash
-node index.js --file config/config.json
+hamster-tap --file config/config.json
 ```
 
 где `config/config.json` — путь к вашему конфигурационному файлу.
+
+Если Вы не устанавливали утилиту глобально, используйте следующую команду:
+
+```bash
+node index.js --file config/config.json
+```
 
 ## Примеры команд
 
 #### Запуск с заданием конфигурационного файла
 
 ```bash
-node index.js --file path/to/your/config.json
+hamster-tap --file path/to/your/config.json
 ```
 
 #### Просмотр доступных команд
@@ -74,7 +94,7 @@ node index.js --file path/to/your/config.json
 Для получения списка доступных команд и опций запустите:
 
 ```bash
-node index.js --help
+hamster-tap --help
 ```
 
 ## Возможные проблемы
