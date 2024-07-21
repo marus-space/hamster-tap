@@ -38,7 +38,7 @@ const scheduleNextTap = async (config) => {
 
   if (maxTaps && tapsRecoverPerSec) {
     const timeout = Math.floor(getRandomInRange(maxTaps / 10 * 1000, maxTaps * 1000) / tapsRecoverPerSec);
-    console.log(`\nТапаем в следующий раз через рандомные ${Math.floor(timeout / 1000).toLocaleString()} секунд`);
+    console.log(`\nТапаем в следующий раз через рандомные ${Math.floor(timeout / 1000).toLocaleString('ru-RU')} секунд`);
     setTimeout(() => scheduleNextTap(config), timeout);
   } else {
     console.error('\nНе удалось загрузить данные, повторная попытка произойдёт через 1 секунду');

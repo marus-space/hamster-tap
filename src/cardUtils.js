@@ -9,8 +9,8 @@ const buyCard = async (card) => {
   try {
     const { clickerUser: { balanceCoins } } = await fetchData({ url: 'buy-upgrade', data });
     console.log(`
-      \nКуплена выгодная карточка: «${card.name}» за ${card.price.toLocaleString()}\
-      \nБаланс: ${Math.floor(balanceCoins).toLocaleString()}\
+      \nКуплена выгодная карточка: «${card.name}» за ${card.price.toLocaleString('ru-RU')}\
+      \nБаланс: ${Math.floor(balanceCoins).toLocaleString('ru-RU')}\
     `);
   } catch (error) {
     console.error('\nОшибка при покупке карточки:', error);
@@ -42,12 +42,12 @@ const getMostProfitableCards = async ({ maxPrice, cardsCount, quantityPriority, 
 
       if (unavailableCardsArray.length) {
         console.warn(
-          `\nТОП-${unavailableCardsArray.length} самых выгодных недоступных карточек дешевле ${Math.floor(maxPrice).toLocaleString()}: \n`,
+          `\nТОП-${unavailableCardsArray.length} самых выгодных недоступных карточек дешевле ${Math.floor(maxPrice).toLocaleString('ru-RU')}: \n`,
           JSON.stringify(unavailableCardsArray.map(({ name, section, price, profitPerHourDelta, condition }) => ({
             'Наименование': name,
             'Раздел': section,
-            'Цена': price.toLocaleString(),
-            'Стоимость 1 монеты в час': (price / profitPerHourDelta).toFixed(2).toLocaleString(),
+            'Цена': price.toLocaleString('ru-RU'),
+            'Стоимость 1 монеты в час': (price / profitPerHourDelta).toFixed(2).toLocaleString('ru-RU'),
             'Условие': `Обновить карточку «${condition.upgradeId}» до уровня ${condition.level}`,
           })), null, '\t'),
         );
@@ -63,12 +63,12 @@ const getMostProfitableCards = async ({ maxPrice, cardsCount, quantityPriority, 
 
     if (availableCardsArray.length) {
       console.log(
-        `\nТОП-${availableCardsArray.length} самых выгодных доступных карточек дешевле ${Math.floor(maxPrice).toLocaleString()}: \n`,
+        `\nТОП-${availableCardsArray.length} самых выгодных доступных карточек дешевле ${Math.floor(maxPrice).toLocaleString('ru-RU')}: \n`,
         JSON.stringify(availableCardsArray.map(({ name, section, price, profitPerHourDelta }) => ({
           'Наименование': name,
           'Раздел': section,
-          'Цена': price.toLocaleString(),
-          'Стоимость 1 монеты в час': (price / profitPerHourDelta).toFixed(2).toLocaleString(),
+          'Цена': price.toLocaleString('ru-RU'),
+          'Стоимость 1 монеты в час': (price / profitPerHourDelta).toFixed(2).toLocaleString('ru-RU'),
         })), null, '\t'),
       );
     }

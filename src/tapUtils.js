@@ -13,11 +13,11 @@ const getInitialInfo = async () => {
     } = clickerUser;
 
     console.log(
-      `\nТекущий статус на ${new Date().toLocaleString()}\
-      \nБаланс: ${Math.floor(balanceCoins).toLocaleString()}\
+      `\nТекущий статус на ${new Date().toLocaleString('ru-RU')}\
+      \nБаланс: ${Math.floor(balanceCoins).toLocaleString('ru-RU')}\
       \nУровень: ${level}\
-      \nТекущая энергия: ${availableTaps.toLocaleString()}\
-      \nМаксимальная энергия: ${maxTaps.toLocaleString()}\
+      \nТекущая энергия: ${availableTaps.toLocaleString('ru-RU')}\
+      \nМаксимальная энергия: ${maxTaps.toLocaleString('ru-RU')}\
       \nТратится энергии за один тап: ${earnPerTap}`
     );
 
@@ -36,7 +36,7 @@ const addTaps = async (count) => {
   };
 
   try {
-    console.log(`\nДобавляем вот столько тапов: ${count.toLocaleString()}`);
+    console.log(`\nДобавляем вот столько тапов: ${count.toLocaleString('ru-RU')}`);
 
     const { clickerUser } = await fetchData({ url: 'tap', data });
 
@@ -49,16 +49,16 @@ const addTaps = async (count) => {
     } = clickerUser;
 
     console.log(
-      `\nСтатус после добавления тапов на ${new Date().toLocaleString()}\
-      \nБаланс: ${Math.floor(balanceCoins).toLocaleString()}\
+      `\nСтатус после добавления тапов на ${new Date().toLocaleString('ru-RU')}\
+      \nБаланс: ${Math.floor(balanceCoins).toLocaleString('ru-RU')}\
       \nУровень: ${level}\
-      \nТекущая энергия: ${availableTaps.toLocaleString()}\
-      \nМаксимальная энергия: ${maxTaps.toLocaleString()}\
+      \nТекущая энергия: ${availableTaps.toLocaleString('ru-RU')}\
+      \nМаксимальная энергия: ${maxTaps.toLocaleString('ru-RU')}\
       \nТратится энергии за один тап: ${earnPerTap}`
     );
 
     if (availableTaps === maxTaps) {
-      console.log(`\nУровень повышен, добавляем ещё вот столько тапов: ${availableTaps.toLocaleString()}`);
+      console.log(`\nУровень повышен, добавляем ещё вот столько тапов: ${availableTaps.toLocaleString('ru-RU')}`);
       return await addTaps(Math.floor(availableTaps / earnPerTap));
     }
 
@@ -77,7 +77,7 @@ const getCoinsPerHour = (clickerUser) => {
 
   const counsPerHour = Math.floor(3600 * tapsRecoverPerSec + earnPassivePerHour);
 
-  console.log(`\nТекущий майнинг в час: ${counsPerHour.toLocaleString()}`)
+  console.log(`\nТекущий майнинг в час: ${counsPerHour.toLocaleString('ru-RU')}`)
 };
 
 module.exports = { getInitialInfo, addTaps, getCoinsPerHour };

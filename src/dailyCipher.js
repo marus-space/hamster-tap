@@ -20,7 +20,7 @@ const claimDailyCipher = async () => {
 
       const responseData = await fetchData({ url: 'claim-daily-cipher', data });
 
-      console.log(`Ежедневный шифр успешно разгадан! Поздравляем с обретением ${bonusCoins.toLocaleString()} монет`);
+      console.log(`Ежедневный шифр успешно разгадан! Поздравляем с обретением ${bonusCoins.toLocaleString('ru-RU')} монет`);
 
       await claimDailyCipher();
     } else {
