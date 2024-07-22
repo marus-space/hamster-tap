@@ -9,11 +9,11 @@ const formatTime = (ms) => {
   const remainingHours = hours % 24;
 
   if (days > 0) {
-    return `${days} дн ${remainingHours} ч`;
+    return `${days} дн${remainingHours ? ` ${remainingHours} ч` : ''}`;
   } else if (hours > 0) {
-    return `${hours} ч ${remainingMinutes} мин`;
+    return `${hours} ч${remainingMinutes ? ` ${remainingMinutes} мин` : ''}`;
   } else if (minutes > 0) {
-    return `${minutes} мин ${remainingSeconds} сек`;
+    return `${minutes} мин${remainingSeconds ? ` ${remainingSeconds} сек` : ''}`;
   } else {
     return `${seconds} сек`;
   }
