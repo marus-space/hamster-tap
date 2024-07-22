@@ -25,6 +25,7 @@ const getInitialInfo = async () => {
     return clickerUser;
   } catch (error) {
     console.error('\nОшибка при получении текущего статуса:', error);
+
     return null;
   }
 };
@@ -60,7 +61,9 @@ const addTaps = async (count) => {
 
     if (availableTaps === maxTaps) {
       const count = Math.floor(availableTaps / earnPerTap);
-      console.log(`\nУровень повышен, добавляем ещё вот столько тапов: ${count.toLocaleString('ru-RU')}`);
+
+      console.log(`\nУровень повышен, можно добавить вот столько тапов: ${count.toLocaleString('ru-RU')}`);
+
       return await addTaps(count);
     }
 
@@ -68,13 +71,16 @@ const addTaps = async (count) => {
     
     if (boostsClickerUser) {
       const count = Math.floor(boostsClickerUser.availableTaps / boostsClickerUser.earnPerTap);
-      console.log(`\nПрименён буст, добавляем ещё вот столько тапов: ${count.toLocaleString('ru-RU')}`);
+
+      console.log(`\nПрименён буст, можно добавить вот столько тапов: ${count.toLocaleString('ru-RU')}`);
+
       return await addTaps(count);
     }
 
     return clickerUser;
   } catch (tapError) {
     console.error('\nОшибка при добавлении тапов:', tapError);
+
     return null;
   }
 };
@@ -85,7 +91,7 @@ const getCoinsPerHour = (clickerUser) => {
     earnPassivePerHour,
   } = clickerUser;
 
-  const counsPerHour = Math.floor(3600 * tapsRecoverPerSec + earnPassivePerHour);
+  const counsPerHour = Math.floor(60 ** 2 * tapsRecoverPerSec + earnPassivePerHour);
 
   console.log(`\nТекущий майнинг в час: ${counsPerHour.toLocaleString('ru-RU')}`);
 };

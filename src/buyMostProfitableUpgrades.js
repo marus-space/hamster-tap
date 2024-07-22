@@ -2,7 +2,12 @@ const { fetchData } = require('./api');
 const { getRandomInRange } = require('./getRandomInRange');
 const { formatTime } = require('./formatTime');
 
-const getMostProfitableUpgrades = async ({ maxPrice, cardsCount, quantityPriority, showUnavailableCards }) => {
+const getMostProfitableUpgrades = async ({
+  maxPrice,
+  cardsCount,
+  quantityPriority,
+  showUnavailableCards,
+}) => {
   try {
     const { upgradesForBuy } = await fetchData({ url: 'upgrades-for-buy' });
 
@@ -12,7 +17,9 @@ const getMostProfitableUpgrades = async ({ maxPrice, cardsCount, quantityPriorit
         .sort((a, b) => b.profitPerHourDelta / b.price - a.profitPerHourDelta / a.price)
         .filter(({condition}) => condition._type === 'ByUpgrade')
         .slice(0, 5)
-        .map(({ id, name, section, price, profitPerHourDelta, condition }) => ({ id, name, section, price, profitPerHourDelta, condition }));
+        .map(({ id, name, section, price, profitPerHourDelta, condition }) => (
+          { id, name, section, price, profitPerHourDelta, condition }
+        ));
 
       if (unavailableCardsArray.length) {
         console.warn(
@@ -29,11 +36,15 @@ const getMostProfitableUpgrades = async ({ maxPrice, cardsCount, quantityPriorit
     }
 
     const availableCardsArray = upgradesForBuy
-      .filter(({ isAvailable, isExpired, price }) => isAvailable && !isExpired && (!quantityPriority || price < maxPrice))
+      .filter(({ isAvailable, isExpired, price }) => (
+        isAvailable && !isExpired && (!quantityPriority || price < maxPrice
+      )))
       .sort((a, b) => b.profitPerHourDelta / b.price - a.profitPerHourDelta / a.price)
       .slice(0, cardsCount)
       .filter(({ price }) => quantityPriority || price < maxPrice)
-      ?.map(({ id, name, section, price, profitPerHourDelta }) => ({ id, name, section, price, profitPerHourDelta }));
+      ?.map(({ id, name, section, price, profitPerHourDelta }) => (
+        { id, name, section, price, profitPerHourDelta }
+      ));
 
     if (availableCardsArray.length) {
       console.log(
@@ -50,6 +61,7 @@ const getMostProfitableUpgrades = async ({ maxPrice, cardsCount, quantityPriorit
     return availableCardsArray;
   } catch (error) {
     console.error('\nОшибка при получении карточек:', error);
+
     return [];
   }
 };
@@ -83,6 +95,7 @@ const buyUpgradeWithCooldown = async (upgrade) => {
 
     setTimeout(async () => {
       console.log(`\nПокупка карточки «${upgrade.name}» отложена на ${formatTime(timeout)}...`);
+
       await buyUpgrade(upgrade);
     }, timeout);
   } else {
@@ -90,7 +103,12 @@ const buyUpgradeWithCooldown = async (upgrade) => {
   }
 };
 
-const buyMostProfitableUpgrades = async ({ maxPrice, cardsCount, quantityPriority, showUnavailableCards }) => {
+const buyMostProfitableUpgrades = async ({
+  maxPrice,
+  cardsCount,
+  quantityPriority,
+  showUnavailableCards,
+}) => {
   try {
     const upgrades = await getMostProfitableUpgrades({
       maxPrice: maxPrice,

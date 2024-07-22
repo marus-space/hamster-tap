@@ -33,7 +33,9 @@ try {
 
 initialize(config);
 
-console.warn('Тапалка включена');
-claimDailyCipher();
-checkTasks();
-scheduleNextTap(config);
+setTimeout(async () => {
+  console.warn('Тапалка включена');
+  await claimDailyCipher();
+  await checkTasks();
+  await scheduleNextTap(config);
+}, 0);

@@ -6,11 +6,14 @@ const getUncompletedTasks = async () => {
   try {
     const { tasks } = await fetchData({ url: 'list-tasks' });
 
-    const uncompletedTasks = tasks.filter(({ id, isCompleted }) => !isCompleted && id !== 'invite_friends');
+    const uncompletedTasks = tasks.filter(({ id, isCompleted }) => (
+      !isCompleted && id !== 'invite_friends'
+    ));
 
     return uncompletedTasks;
   } catch (error) {
     console.error('\nОшибка при получении незавершенных заданий:', error);
+    
     return [];
   }
 };

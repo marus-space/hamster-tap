@@ -6,7 +6,9 @@ const getFreeAvailableBoosts = async () => {
     const { boostsForBuy } = await fetchData({ url: 'boosts-for-buy' });
 
     const freeBoosts = boostsForBuy
-      .filter(({ price, level, maxLevel }) => !price && (!maxLevel || level < maxLevel));
+      .filter(({ price, level, maxLevel }) => (
+        !price && (!maxLevel || level < maxLevel)
+    ));
     
     if (freeBoosts.length) {
       const freeAvailableBoosts = freeBoosts
@@ -30,6 +32,7 @@ const getFreeAvailableBoosts = async () => {
     return [];
   } catch (error) {
     console.error('\nОшибка при получении бесплатных бустов:', error);
+
     return [];
   }
 };
@@ -53,6 +56,7 @@ const buyBoost = async (boost) => {
     }
   } catch (error) {
     console.error(`\nОшибка при покупке бесплатного буста «${boost.id}»:`, error);
+
     return null;
   }
 };
@@ -68,6 +72,7 @@ const buyFreeBoosts = async () => {
     return null;
   } catch (error) {
     console.error('\nОшибка при покупке бесплатных бустов:', error);
+
     return null;
   }
 };

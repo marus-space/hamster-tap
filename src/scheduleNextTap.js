@@ -4,7 +4,12 @@ const { getRandomInRange } = require('./getRandomInRange');
 const { formatTime } = require('./formatTime');
 
 const generateTaps = async (config) => {
-  const { maxPriceCoefficient, cardsCount, quantityPriority, showUnavailableCards } = config.autoBuySettings;
+  const {
+    maxPriceCoefficient,
+    cardsCount,
+    quantityPriority,
+    showUnavailableCards,
+  } = config.autoBuySettings;
 
   const { availableTaps, earnPerTap } = await getInitialInfo();
 
@@ -41,6 +46,7 @@ const scheduleNextTap = async (config) => {
     setTimeout(() => scheduleNextTap(config), timeout);
   } else {
     console.error(`\nНе удалось загрузить данные, повторная попытка произойдёт через ${formatTime(1000)}...`);
+    
     setTimeout(() => scheduleNextTap(config), 1000);
   }
 };
