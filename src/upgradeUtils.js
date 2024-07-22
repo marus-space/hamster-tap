@@ -64,13 +64,16 @@ const buyUpgrade = async (upgrade) => {
     const { clickerUser } = await fetchData({ url: 'buy-upgrade', data });
 
     if (clickerUser) {
+      const { balanceCoins } = clickerUser;
+      const { name, price, } = upgrade;
+
       console.log(`
-        \nКуплена выгодная карточка: «${upgrade.name}» за ${upgrade.price.toLocaleString('ru-RU')}\
-        \nБаланс: ${Math.floor(clickerUser.balanceCoins).toLocaleString('ru-RU')}\
+        \nКуплена выгодная карточка: «${name}» за ${price.toLocaleString('ru-RU')}\
+        \nБаланс: ${Math.floor(balanceCoins).toLocaleString('ru-RU')}\
       `);
     }
   } catch (error) {
-    console.error(`\nОшибка при покупке карточки ${upgrade.id}:`, error);
+    console.error(`\nОшибка при покупке карточки «${upgrade.name}»:`, error);
   }
 };
 

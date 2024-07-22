@@ -28,11 +28,11 @@ const checkTask = async (task) => {
       const { id, isCompleted } = task;
 
       if (isCompleted) {
-        console.log(`\nЗадание ${id} успешно выполнено!\nБаланс: ${balanceCoins.toLocaleString('ru-RU')}`);
+        console.log(`\nЗадание «${id}» успешно выполнено!\nБаланс: ${balanceCoins.toLocaleString('ru-RU')}`);
       }
     }
   } catch (error) {
-    console.error(`\nОшибка при выполнении задания ${task.id}:`, error);
+    console.error(`\nОшибка при выполнении задания «${task.id}»:`, error);
   }
 };
 
