@@ -77,7 +77,7 @@ const getCoinsPerHour = (clickerUser) => {
 
   const counsPerHour = Math.floor(3600 * tapsRecoverPerSec + earnPassivePerHour);
 
-  console.log(`\nТекущий майнинг в час: ${counsPerHour.toLocaleString('ru-RU')}`)
+  console.log(`\nТекущий майнинг в час: ${counsPerHour.toLocaleString('ru-RU')}`);
 };
 
 module.exports = { getInitialInfo, addTaps, getCoinsPerHour };
