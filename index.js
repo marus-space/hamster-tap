@@ -6,6 +6,7 @@ const path = require('path');
 const { initialize } = require('./src/api');
 const { scheduleNextTap } = require('./src/schedule');
 const { claimDailyCipher } = require('./src/dailyCipher');
+const { checkTasks } = require('./src/checkTasks');
 
 program
   .version('1.0.0')
@@ -34,4 +35,5 @@ initialize(config);
 
 console.warn('Тапалка включена');
 claimDailyCipher();
+checkTasks();
 scheduleNextTap(config);
