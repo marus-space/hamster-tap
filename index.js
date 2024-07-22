@@ -4,8 +4,8 @@ const { program } = require('commander');
 const fs = require('fs');
 const path = require('path');
 const { initialize } = require('./src/api');
-const { scheduleNextTap } = require('./src/schedule');
-const { claimDailyCipher } = require('./src/dailyCipher');
+const { scheduleNextTap } = require('./src/scheduleNextTap');
+const { claimDailyCipher } = require('./src/claimDailyCipher');
 const { checkTasks } = require('./src/checkTasks');
 
 program

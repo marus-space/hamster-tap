@@ -1,5 +1,5 @@
 const { getInitialInfo, addTaps, getCoinsPerHour } = require('./tapUtils');
-const { buyMostProfitableUpgrades } = require('./upgradeUtils');
+const { buyMostProfitableUpgrades } = require('./buyMostProfitableUpgrades');
 const { getRandomInRange } = require('./getRandomInRange');
 const { formatTime } = require('./formatTime');
 
