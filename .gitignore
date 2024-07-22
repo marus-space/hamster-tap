@@ -95,3 +95,5 @@ out/
 # Ignore all files in the config directory except example-config.json
 config/*
 !config/example-config.json
+
+*.har
