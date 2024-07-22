@@ -1,5 +1,6 @@
 const { fetchData } = require('./api');
 const { formatTime } = require('./formatTime');
+const { getRandomInRange } = require('./getRandomInRange');
 
 const getUncompletedTasks = async () => {
   try {
@@ -45,7 +46,7 @@ const checkTasks = async () => {
   } catch (error) {
     console.error('\nОшибка при выполнении незавершенных заданий:', error);
   } finally {
-    const timeout = 3 * 60 ** 2 * 1000; // 3 часа в мс
+    const timeout = getRandomInRange(2 * 60 ** 2 * 1000, 4 * 60 ** 2 * 1000); // От 2 до 4 часов в мс
     
     console.log(`\nСледующее выполнение незавершенных заданий через ${formatTime(timeout)}...`);
 

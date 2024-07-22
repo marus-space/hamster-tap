@@ -28,7 +28,7 @@ const claimDailyCipher = async () => {
       // TODO: Получать remainSeconds из ответа на POST /claim-daily-cipher вместо рекурсивного вызова claimDailyCipher
       await claimDailyCipher();
     } else {
-      const timeout = getRandomInRange(remainSeconds * 1000, (remainSeconds + 3600) * 1000);
+      const timeout = getRandomInRange(remainSeconds * 1000, (remainSeconds + 60 ** 2) * 1000);
 
       console.log(`Сегодняшний шифр разгадан, разгадаем следующий через ${formatTime(timeout)}...`);
 
