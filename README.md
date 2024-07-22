@@ -162,6 +162,17 @@ node index.js --file config/config.json
 hamster-tap --file path/to/your/config.json
 ```
 
+#### Запуск с записью логов в файл
+
+```bash
+DATE_FORMAT=$(date +"%Y-%m-%d-%H-%M")               
+LOG_FILE="logs/hamster-tap-${DATE_FORMAT}.log"
+
+hamster-tap --file config/config.json > $MY_LOG_FILE 2>&1
+```
+
+Вы можете настроить путь до папки с логами и наименование файлов по своему усмотрению (переменная LOG_FILE).
+
 #### Просмотр доступных команд
 
 Для получения списка доступных команд и опций запустите:
