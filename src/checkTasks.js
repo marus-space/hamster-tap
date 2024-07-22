@@ -10,6 +10,7 @@ const getUncompletedTasks = async () => {
     return uncompletedTasks;
   } catch (error) {
     console.error('\nОшибка при получении незавершенных заданий:', error);
+    return [];
   }
 };
 
@@ -26,7 +27,7 @@ const checkTask = async (task) => {
       const { id, isCompleted } = task;
 
       if (isCompleted) {
-        console.log(`\nЗадание ${id} успешно выполнено!\nБаланс: ${balanceCoins.toLocaleString()}`);
+        console.log(`\nЗадание ${id} успешно выполнено!\nБаланс: ${balanceCoins.toLocaleString('ru-RU')}`);
       }
     }
   } catch (error) {
