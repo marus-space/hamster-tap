@@ -94,12 +94,10 @@ const buyUpgrade = async ({ id, name, price }) => {
 const buyUpgradeWithCooldown = async (upgrade) => {
   if (upgrade.cooldownSeconds) {
     const timeout = getRandomInRange(upgrade.cooldownSeconds * 1000, (upgrade.cooldownSeconds + 60) * 1000);
+    
+    console.log(`\nПокупка карточки «${upgrade.name}» отложена на ${formatTime(timeout)}...`);
 
-    setTimeout(async () => {
-      console.log(`\nПокупка карточки «${upgrade.name}» отложена на ${formatTime(timeout)}...`);
-
-      await buyUpgrade(upgrade);
-    }, timeout);
+    setTimeout(async () => await buyUpgrade(upgrade), timeout);
   } else {
     await buyUpgrade(upgrade);
   }
