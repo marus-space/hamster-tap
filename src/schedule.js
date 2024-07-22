@@ -1,5 +1,5 @@
 const { getInitialInfo, addTaps, getCoinsPerHour } = require('./tapUtils');
-const { buyCardWithCooldown, getMostProfitableCards } = require('./cardUtils');
+const { buyMostProfitableUpgrades } = require('./upgradeUtils');
 const { getRandomInRange } = require('./getRandomInRange');
 const { formatTime } = require('./formatTime');
 
@@ -12,16 +12,12 @@ const generateTaps = async (config) => {
     const clickerUser = await addTaps(Math.floor(availableTaps / earnPerTap));
 
     if (clickerUser) {
-      const cardsArray = await getMostProfitableCards({
+      await buyMostProfitableUpgrades({
         maxPrice: maxPriceCoefficient * clickerUser.balanceCoins,
         cardsCount: cardsCount,
         quantityPriority: quantityPriority,
         showUnavailableCards: showUnavailableCards,
       });
-
-      for (const card of cardsArray) {
-        await buyCardWithCooldown(card);
-      }
 
       getCoinsPerHour(clickerUser);
 

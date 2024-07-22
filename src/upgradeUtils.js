@@ -2,40 +2,7 @@ const { fetchData } = require('./api');
 const { getRandomInRange } = require('./getRandomInRange');
 const { formatTime } = require('./formatTime');
 
-const buyCard = async (card) => {
-  const data = {
-    timestamp: Math.floor(Date.now() / 1000),
-    upgradeId: card.id,
-  };
-
-  try {
-    const { clickerUser } = await fetchData({ url: 'buy-upgrade', data });
-
-    if (clickerUser) {
-      console.log(`
-        \nКуплена выгодная карточка: «${card.name}» за ${card.price.toLocaleString('ru-RU')}\
-        \nБаланс: ${Math.floor(clickerUser.balanceCoins).toLocaleString('ru-RU')}\
-      `);
-    }
-  } catch (error) {
-    console.error('\nОшибка при покупке карточки:', error);
-  }
-};
-
-const buyCardWithCooldown = async (card) => {
-  if (card.cooldownSeconds) {
-    const timeout = getRandomInRange(card.cooldownSeconds * 1000, (card.cooldownSeconds + 60) * 1000);
-
-    setTimeout(async () => {
-      console.log(`\nПокупка карточки «${card.name}» отложена на ${formatTime(timeout)}...`);
-      await buyCard(card);
-    }, timeout);
-  } else {
-    await buyCard(card);
-  }
-};
-
-const getMostProfitableCards = async ({ maxPrice, cardsCount, quantityPriority, showUnavailableCards }) => {
+const getMostProfitableUpgrades = async ({ maxPrice, cardsCount, quantityPriority, showUnavailableCards }) => {
   try {
     const { upgradesForBuy } = await fetchData({ url: 'upgrades-for-buy' });
 
@@ -87,4 +54,54 @@ const getMostProfitableCards = async ({ maxPrice, cardsCount, quantityPriority, 
   }
 };
 
-module.exports = { buyCard, buyCardWithCooldown, getMostProfitableCards };
+const buyUpgrade = async (upgrade) => {
+  const data = {
+    timestamp: Math.floor(Date.now() / 1000),
+    upgradeId: upgrade.id,
+  };
+
+  try {
+    const { clickerUser } = await fetchData({ url: 'buy-upgrade', data });
+
+    if (clickerUser) {
+      console.log(`
+        \nКуплена выгодная карточка: «${upgrade.name}» за ${upgrade.price.toLocaleString('ru-RU')}\
+        \nБаланс: ${Math.floor(clickerUser.balanceCoins).toLocaleString('ru-RU')}\
+      `);
+    }
+  } catch (error) {
+    console.error(`\nОшибка при покупке карточки ${upgrade.id}:`, error);
+  }
+};
+
+const buyUpgradeWithCooldown = async (upgrade) => {
+  if (upgrade.cooldownSeconds) {
+    const timeout = getRandomInRange(upgrade.cooldownSeconds * 1000, (upgrade.cooldownSeconds + 60) * 1000);
+
+    setTimeout(async () => {
+      console.log(`\nПокупка карточки «${upgrade.name}» отложена на ${formatTime(timeout)}...`);
+      await buyUpgrade(upgrade);
+    }, timeout);
+  } else {
+    await buyUpgrade(upgrade);
+  }
+};
+
+const buyMostProfitableUpgrades = async ({ maxPrice, cardsCount, quantityPriority, showUnavailableCards }) => {
+  try {
+    const upgrades = await getMostProfitableUpgrades({
+      maxPrice: maxPrice,
+      cardsCount: cardsCount,
+      quantityPriority: quantityPriority,
+      showUnavailableCards: showUnavailableCards,
+    });
+
+    for (const upgrade of upgrades) {
+      await buyUpgradeWithCooldown(upgrade);
+    }
+  } catch (error) {
+    console.error('\nОшибка при покупке самых выгодных карточек:', error);
+  }
+};
+
+module.exports = { buyMostProfitableUpgrades };
