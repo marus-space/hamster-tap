@@ -1,4 +1,5 @@
 const { fetchData } = require('./api');
+const { buyFreeBoosts } = require('./buyFreeBoosts');
 
 const getInitialInfo = async () => {
   try {
@@ -58,8 +59,17 @@ const addTaps = async (count) => {
     );
 
     if (availableTaps === maxTaps) {
-      console.log(`\nУровень повышен, добавляем ещё вот столько тапов: ${availableTaps.toLocaleString('ru-RU')}`);
-      return await addTaps(Math.floor(availableTaps / earnPerTap));
+      const count = Math.floor(availableTaps / earnPerTap);
+      console.log(`\nУровень повышен, добавляем ещё вот столько тапов: ${count.toLocaleString('ru-RU')}`);
+      return await addTaps(count);
+    }
+
+    const boostsClickerUser = await buyFreeBoosts();
+    
+    if (boostsClickerUser) {
+      const count = Math.floor(boostsClickerUser.availableTaps / boostsClickerUser.earnPerTap);
+      console.log(`\nПрименён буст, добавляем ещё вот столько тапов: ${count.toLocaleString('ru-RU')}`);
+      return await addTaps(count);
     }
 
     return clickerUser;
