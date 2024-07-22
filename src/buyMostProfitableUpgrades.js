@@ -66,10 +66,10 @@ const getMostProfitableUpgrades = async ({
   }
 };
 
-const buyUpgrade = async (upgrade) => {
+const buyUpgrade = async ({ id, name, price }) => {
   const data = {
     timestamp: Math.floor(Date.now() / 1000),
-    upgradeId: upgrade.id,
+    upgradeId: id,
   };
 
   try {
@@ -77,15 +77,16 @@ const buyUpgrade = async (upgrade) => {
 
     if (clickerUser) {
       const { balanceCoins } = clickerUser;
-      const { name, price, } = upgrade;
 
       console.log(`
-        \nКуплена выгодная карточка: «${name}» за ${price.toLocaleString('ru-RU')}\
+        \nКуплена выгодная карточка «${name}» за ${price.toLocaleString('ru-RU')}\
         \nБаланс: ${Math.floor(balanceCoins).toLocaleString('ru-RU')}\
       `);
+    } else {
+      console.log(`\nНе удалось купить выгодную карточку «${name}» за ${price.toLocaleString('ru-RU')}`);
     }
   } catch (error) {
-    console.error(`\nОшибка при покупке карточки «${upgrade.name}»:`, error);
+    console.error(`\nОшибка при покупке карточки «${name}»:`, error);
   }
 };
 
