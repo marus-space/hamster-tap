@@ -17,7 +17,7 @@ program.parse(process.argv);
 const options = program.opts();
 
 if (!options.file) {
-  console.error('Error: Path to JSON file with parameters is required');
+  console.error('\nError: Path to JSON file with parameters is required');
   process.exit(1);
 }
 
@@ -27,7 +27,7 @@ try {
   const data = fs.readFileSync(options.file, 'utf8');
   config = JSON.parse(data);
 } catch (err) {
-  console.error('Error reading or parsing file:', err);
+  console.error('\nError reading or parsing file:', err);
   process.exit(1);
 }
 
