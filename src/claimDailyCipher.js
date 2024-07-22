@@ -11,35 +11,42 @@ const decodeDailyCipher = (cipher) => {
 };
 
 const claimDailyCipher = async () => {
+  let remainSeconds = 0;
+  
   try {
     const { dailyCipher } = await fetchData({ url: 'config' });
 
     if (dailyCipher) {
-      const { isClaimed, bonusCoins, cipher, remainSeconds } = dailyCipher;
+      const { isClaimed, bonusCoins, cipher } = dailyCipher;
+      remainSeconds = dailyCipher.remainSeconds;
 
       if (!isClaimed) {
         const data = {
           cipher: decodeDailyCipher(cipher),
         };
 
-        const responseData = await fetchData({ url: 'claim-daily-cipher', data });
+        const { dailyCipher: updatedDailyCipher } = await fetchData({ url: 'claim-daily-cipher', data });
 
-        console.log(`\nЕжедневный шифр успешно разгадан! Поздравляем с обретением ${bonusCoins.toLocaleString('ru-RU')} монет`);
+        if (updatedDailyCipher) {
+          if (updatedDailyCipher.isClaimed) {
+            console.log(`
+              \nЕжедневный шифр успешно разгадан! Сегодняшнее слово: ${data.cipher}\
+              \nПоздравляем с обретением ${bonusCoins.toLocaleString('ru-RU')} монет\
+            `);
 
-        console.log('\nPOST /claim-daily-cipher response data: ', JSON.stringify(responseData, null, '\t'));
-        
-        // TODO: Получать remainSeconds из ответа на POST /claim-daily-cipher вместо рекурсивного вызова claimDailyCipher
-        await claimDailyCipher();
-      } else {
-        const timeout = getRandomInRange(remainSeconds * 1000, (remainSeconds + 60 ** 2) * 1000);
-
-        console.log(`\nСегодняшний шифр разгадан, разгадаем следующий через ${formatTime(timeout)}...`);
-
-        setTimeout(async () => await claimDailyCipher(), timeout);
+            remainSeconds = updatedDailyCipher.remainSeconds;
+          }
+        }
       }
     }
   } catch (error) {
     console.error('\nОшибка при решении ежедневного шифра:', error);
+  } finally {
+    const timeout = getRandomInRange(remainSeconds * 1000, (remainSeconds + 60 ** 2) * 1000);
+
+    console.log(`\nСегодняшний шифр разгадан, разгадаем следующий через ${formatTime(timeout)}...`);
+
+    setTimeout(async () => await claimDailyCipher(), timeout);
   }
 };
 
