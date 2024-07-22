@@ -19,7 +19,9 @@ const getFreeAvailableBoosts = async () => {
         });
 
       if (freeAvailableBoosts.length) {
-        console.log('\nДоступные бесплатные бусты:', JSON.stringify(freeAvailableBoosts, null, '\t'));
+        console.log(
+          '\nДоступные бесплатные бусты:',
+          JSON.stringify(freeAvailableBoosts.map(({ id }) => id).join(', '), null, '\t'));
       }
 
       return freeAvailableBoosts;
@@ -45,7 +47,7 @@ const buyBoost = async (boost) => {
       const { availableTaps } = clickerUser;
       const { id, } = boost;
 
-      console.log(`\nКуплен бесплатный буст «${id}»\nТекущая энергия: ${availableTaps.toLocaleString('ru-RU')}`);
+      console.log(`\nКуплен бесплатный буст «${id}»\nТекущая энергия: ${Math.floor(availableTaps).toLocaleString('ru-RU')}`);
 
       return clickerUser;
     }

@@ -25,10 +25,14 @@ const checkTask = async (task) => {
 
     if (clickerUser && task) {
       const { balanceCoins } = clickerUser;
-      const { id, isCompleted } = task;
+      const { id, rewardCoins, isCompleted } = task;
 
       if (isCompleted) {
-        console.log(`\nЗадание «${id}» успешно выполнено!\nБаланс: ${balanceCoins.toLocaleString('ru-RU')}`);
+        console.log(`
+          \nЗадание «${id}» успешно выполнено!\
+          \nПолучено ${Math.floor(rewardCoins).toLocaleString('ru-RU')} монет\
+          \nБаланс: ${Math.floor(balanceCoins).toLocaleString('ru-RU')}\
+        `);
       }
     }
   } catch (error) {
@@ -48,7 +52,7 @@ const checkTasks = async () => {
   } finally {
     const timeout = getRandomInRange(2 * 60 ** 2 * 1000, 4 * 60 ** 2 * 1000); // От 2 до 4 часов в мс
     
-    console.log(`\nСледующее выполнение незавершенных заданий через ${formatTime(timeout)}...`);
+    console.log(`\nСледующая проверка незавершенных заданий через ${formatTime(timeout)}...`);
 
     setTimeout(async () => await checkTasks(), timeout);
   }
