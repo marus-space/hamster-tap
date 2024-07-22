@@ -42,18 +42,19 @@ const getMostProfitableUpgrades = async ({
       .sort((a, b) => b.profitPerHourDelta / b.price - a.profitPerHourDelta / a.price)
       .slice(0, cardsCount)
       .filter(({ price }) => quantityPriority || price < maxPrice)
-      ?.map(({ id, name, section, price, profitPerHourDelta }) => (
-        { id, name, section, price, profitPerHourDelta }
+      ?.map(({ id, name, section, price, profitPerHourDelta, cooldownSeconds }) => (
+        { id, name, section, price, profitPerHourDelta, cooldownSeconds }
       ));
 
     if (availableCardsArray.length) {
       console.log(
         `\nТОП-${availableCardsArray.length} самых выгодных доступных карточек дешевле ${Math.floor(maxPrice).toLocaleString('ru-RU')}: \n`,
-        JSON.stringify(availableCardsArray.map(({ name, section, price, profitPerHourDelta }) => ({
+        JSON.stringify(availableCardsArray.map(({ name, section, price, profitPerHourDelta, cooldownSeconds }) => ({
           'Наименование': name,
           'Раздел': section,
           'Цена': price.toLocaleString('ru-RU'),
           'Стоимость 1 монеты в час': (price / profitPerHourDelta).toFixed(2).toLocaleString('ru-RU'),
+          ...(cooldownSeconds && { 'Время до покупки': formatTime(cooldownSeconds) } ),
         })), null, '\t'),
       );
     }
