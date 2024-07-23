@@ -129,7 +129,7 @@ const getMostProfitableUpgrades = async ({
           'Раздел': section,
           'Цена': price.toLocaleString('ru-RU'),
           'Стоимость 1 монеты в час': (price / profitPerHourDelta).toFixed(2).toLocaleString('ru-RU'),
-          ...(cooldownSeconds && { 'Время до покупки': formatTime(cooldownSeconds) } ),
+          ...(cooldownSeconds && { 'Время до покупки': formatTime(cooldownSeconds * 1000) } ),
         })), null, '\t'),
       );
     }
