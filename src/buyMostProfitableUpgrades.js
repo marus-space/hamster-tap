@@ -2,74 +2,67 @@ const { fetchData } = require('./api');
 const { getRandomInRange } = require('./getRandomInRange');
 const { formatTime } = require('./formatTime');
 
-const filterByConditionType = (objects) => {
-  const recursiveFilter = (obj) => {
-    if ((obj._type && obj._type !== 'ByUpgrade') || obj.isExpired) {
+const getNestedUpgradeById = (upgradesForBuy, upgradeId, requiredLevel) => {
+  let upgrade = upgradesForBuy.find(({ id }) => id === upgradeId);
+
+  const { name, section, level, price, isAvailable, isExpired, condition, profitPerHourDelta, expiresAt } = upgrade;
+
+  if (condition?._type && condition._type !== 'ByUpgrade' || isExpired) {
+    return null;
+  }
+  
+  if (condition?.upgradeId) {
+    upgrade = {
+      ...upgrade,
+      condition: {
+        requiredLevel: condition.level,
+        ...getNestedUpgradeById(
+          upgradesForBuy,
+          condition.upgradeId,
+          !upgrade?.isAvailable ? condition.level : undefined),
+      },
+    };
+
+    if (!upgrade.condition?.name) {
       return null;
     }
+  }
+  
 
-    if (obj.condition) {
-      const nestedResult = recursiveFilter(obj.condition);
+  let expectedTotalPrice = 0;
 
-      if (!nestedResult) {
-        return null;
-      }
+  if (requiredLevel !== undefined && level !== undefined && price) {
+    expectedTotalPrice = Array.from({ length: requiredLevel - level + 1 }, (v, k) => k)
+      .reduce((sum, index) => {
+        return sum += price * 2 ** index;
+      }, 0);
+  }
 
-      obj.condition = nestedResult;
-    }
-
-    return obj;
+  return {
+    currentLevel: level - 1,
+    name,
+    section,
+    price,
+    expectedTotalPrice: (expectedTotalPrice || price) + (upgrade.condition?.expectedTotalPrice || 0),
+    passiveCoinPrice: (price / profitPerHourDelta).toFixed(2),
+    ...(expiresAt && { expiresAt: new Date(expiresAt).toLocaleString('ru-RU') }),
+    ...(!isAvailable && { condition: upgrade.condition }),
   };
-
-  return objects
-    .map(obj => recursiveFilter(obj))
-    .filter(obj => obj !== null);
 };
 
 const getMostProfitableUnavailableUpgrades = async () => {
   try {
     const { upgradesForBuy } = await fetchData({ url: 'upgrades-for-buy' });
 
-    const getUpgradeById = (upgradeId) => {
-      let upgrade = upgradesForBuy.find(({ id }) => id === upgradeId);
-      
-      upgrade = {
-        ...upgrade,
-        condition: {
-          ...upgrade.condition,
-          ...(upgrade.condition?.upgradeId && getUpgradeById(upgrade.condition.upgradeId)),
-        },
-      };
-
-      if (upgrade.isAvailable) {
-        let { condition, ...otherParams } = upgrade;
-        upgrade = otherParams;
-      }
-      
-      const { name, section, level, price, isExpired, condition, profitPerHourDelta } = upgrade;
-
-      return {
-        currentLevel: level - 1,
-        name,
-        section,
-        price,
-        isExpired,
-        passiveCoinPrice: (price / profitPerHourDelta).toFixed(2),
-        profitPerHourDelta,
-        condition,
-      };
-    };
-
     const unavailableCardsArray = upgradesForBuy
-        .filter(({ isAvailable, isExpired }) => !isAvailable && !isExpired)
-        .sort((a, b) => b.profitPerHourDelta / b.price - a.profitPerHourDelta / a.price)
-        .filter(({condition}) => condition._type === 'ByUpgrade')
-        .map(({ id }) => getUpgradeById(id));
+      .filter(({ isAvailable }) => !isAvailable)
+      .map(({ id }) => getNestedUpgradeById(upgradesForBuy, id))
+      .filter((upgrade) => !!upgrade)
+      .sort((a, b) => a.expectedTotalPrice - b.expectedTotalPrice);
     
-    const filteredCards = filterByConditionType(unavailableCardsArray);
-    
-    console.log(JSON.stringify(filteredCards, null, '\t'));
+    console.log(JSON.stringify(unavailableCardsArray, null, '\t'));
 
+    return unavailableCardsArray;
   } catch (error) {
     console.error('\nОшибка при получении карточек:', error);
 
@@ -200,4 +193,4 @@ const buyMostProfitableUpgrades = async ({
   }
 };
 
-module.exports = { buyMostProfitableUpgrades, getMostProfitableUnavailableUpgrades };
+module.exports = { buyMostProfitableUpgrades, getMostProfitableUnavailableUpgrades, getMostProfitableUpgrades };
