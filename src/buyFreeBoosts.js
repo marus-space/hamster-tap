@@ -7,7 +7,7 @@ const getFreeAvailableBoosts = async () => {
 
     const freeBoosts = boostsForBuy
       .filter(({ price, level, maxLevel }) => (
-        !price && (!maxLevel || level < maxLevel)
+        !price && (!maxLevel || level <= maxLevel)
     ));
     
     if (freeBoosts.length) {
