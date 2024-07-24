@@ -19,7 +19,8 @@ const getNestedUpgradeById = (upgradesForBuy, upgradeId, requiredLevel) => {
         ...getNestedUpgradeById(
           upgradesForBuy,
           condition.upgradeId,
-          !upgrade?.isAvailable ? condition.level : undefined),
+          condition.level,
+        ),
       },
     };
 
@@ -31,8 +32,8 @@ const getNestedUpgradeById = (upgradesForBuy, upgradeId, requiredLevel) => {
 
   let expectedTotalPrice = 0;
 
-  if (requiredLevel !== undefined && level !== undefined && price) {
-    expectedTotalPrice = Array.from({ length: requiredLevel - level + 1 }, (v, k) => k)
+  if (requiredLevel !== undefined && level !== undefined && requiredLevel > level - 1 && price) {
+    expectedTotalPrice = Array.from({ length: requiredLevel - (level - 1) }, (v, k) => k)
       .reduce((sum, index) => {
         return sum += price * 2 ** index;
       }, 0);
@@ -43,7 +44,8 @@ const getNestedUpgradeById = (upgradesForBuy, upgradeId, requiredLevel) => {
     name,
     section,
     price,
-    expectedTotalPrice: (expectedTotalPrice || price) + (!isAvailable ? upgrade.condition?.expectedTotalPrice || 0 : 0),
+    expectedTotalPrice:
+      (requiredLevel ? expectedTotalPrice : price) + (!isAvailable ? upgrade.condition?.expectedTotalPrice || 0 : 0),
     passiveCoinPrice: (price / profitPerHourDelta).toFixed(2),
     ...(expiresAt && { expiresAt: new Date(expiresAt).toLocaleString('ru-RU') }),
     ...(!isAvailable && { condition: upgrade.condition }),
