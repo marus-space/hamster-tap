@@ -43,7 +43,7 @@ const getNestedUpgradeById = (upgradesForBuy, upgradeId, requiredLevel) => {
     name,
     section,
     price,
-    expectedTotalPrice: (expectedTotalPrice || price) + (upgrade.condition?.expectedTotalPrice || 0),
+    expectedTotalPrice: (expectedTotalPrice || price) + (!isAvailable ? upgrade.condition?.expectedTotalPrice || 0 : 0),
     passiveCoinPrice: (price / profitPerHourDelta).toFixed(2),
     ...(expiresAt && { expiresAt: new Date(expiresAt).toLocaleString('ru-RU') }),
     ...(!isAvailable && { condition: upgrade.condition }),
