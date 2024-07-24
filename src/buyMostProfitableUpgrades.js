@@ -6,6 +6,7 @@ const getNestedUpgradeById = (upgradesForBuy, upgradeId, requiredLevel) => {
   let upgrade = upgradesForBuy.find(({ id }) => id === upgradeId);
 
   const { name, section, level, price, isAvailable, isExpired, condition, profitPerHourDelta, expiresAt } = upgrade;
+  const currentLevel = level - 1;
 
   if (condition?._type && condition._type !== 'ByUpgrade' || isExpired) {
     return null;
@@ -32,15 +33,15 @@ const getNestedUpgradeById = (upgradesForBuy, upgradeId, requiredLevel) => {
 
   let expectedTotalPrice = 0;
 
-  if (requiredLevel !== undefined && level !== undefined && requiredLevel > level - 1 && price) {
-    expectedTotalPrice = Array.from({ length: requiredLevel - (level - 1) }, (v, k) => k)
+  if (requiredLevel !== undefined && requiredLevel > currentLevel && price) {
+    expectedTotalPrice = Array.from({ length: requiredLevel - currentLevel }, (v, k) => k)
       .reduce((sum, index) => {
         return sum += price * 2 ** index;
       }, 0);
   }
 
   return {
-    currentLevel: level - 1,
+    currentLevel,
     name,
     section,
     price,
@@ -167,7 +168,14 @@ const buyUpgradeWithCooldown = async (upgrade) => {
     
     console.log(`\nПокупка карточки «${upgrade.name}» отложена на ${formatTime(timeout)}...`);
 
-    setTimeout(async () => await buyUpgrade(upgrade), timeout);
+    setTimeout(async () => {
+      const { upgradesForBuy } = await fetchData({ url: 'upgrades-for-buy' });
+      const currentUpgrade = upgradesForBuy.find(({ id }) => id === upgrade.id);
+
+      if (currentUpgrade?.price === upgrade.price && !currentUpgrade?.cooldownSeconds) {
+        await buyUpgrade(upgrade);
+      }
+    }, timeout);
   } else {
     await buyUpgrade(upgrade);
   }
