@@ -100,7 +100,7 @@ const claimDailyKeysMiniGame = async () => {
     const { isClaimed, remainSeconds, remainSecondsToNextAttempt } = await getKeysMiniGameConfig();
 
     if (isClaimed) {
-      const nextGameTimeout = getRandomInRange(remainSeconds * 1000, (remainSeconds + 60 ** 2) + 1000);
+      const nextGameTimeout = getRandomInRange(remainSeconds * 1000, (remainSeconds + 60 ** 2) * 1000);
 
       console.log(`\nСегодняшняя мини-игра с ключами уже пройдена, следующая игра через ${formatTime(nextGameTimeout)}...`);
 
@@ -133,7 +133,7 @@ const claimDailyKeysMiniGame = async () => {
     setTimeout(async () => {
       const { remainSeconds } = await endCaseMiniGame(data);
 
-      const nextGameTimeout = getRandomInRange(remainSeconds * 1000, (remainSeconds + 60 ** 2) + 1000);
+      const nextGameTimeout = getRandomInRange(remainSeconds * 1000, (remainSeconds + 60 ** 2) * 1000);
 
       console.log(`\nCледующая мини-игра с ключами через ${formatTime(nextGameTimeout)}...`);
 
