@@ -7,6 +7,7 @@ const { initialize } = require('./src/api');
 const { scheduleNextTap } = require('./src/scheduleNextTap');
 const { claimDailyCipher } = require('./src/claimDailyCipher');
 const { checkTasks } = require('./src/checkTasks');
+const { claimDailyKeysMiniGame } = require('./src/claimDailyKeysMiniGame');
 
 program
   .version('1.0.0')
@@ -36,6 +37,7 @@ initialize(config);
 setTimeout(async () => {
   console.warn('Тапалка включена');
   await claimDailyCipher();
+  await claimDailyKeysMiniGame();
   await checkTasks();
   await scheduleNextTap(config);
 }, 0);

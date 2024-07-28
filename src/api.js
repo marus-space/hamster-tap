@@ -6,8 +6,8 @@ const initialize = (config) => {
   authorizationHeader = config.authorizationHeader;
 };
 
-const fetchData = async ({ url, method, data }) => (
-  await fetch(`${baseUrl}/${url}`, {
+const fetchData = async ({ customBaseUrl, url, method, data }) => (
+  await fetch(`${customBaseUrl ?? baseUrl}/${url}`, {
     method: method ?? 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
